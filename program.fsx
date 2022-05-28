@@ -27,10 +27,8 @@ module PokeApiModule =
             return pkmn
         }
 
-
 open System
 open Newtonsoft.Json.Linq
-
 
 printf "Digite um número: \n" |> ignore
 
