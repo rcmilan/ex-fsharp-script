@@ -27,8 +27,10 @@ module PokeApiModule =
             return pkmn
         }
 
+
 open System
 open Newtonsoft.Json.Linq
+
 
 printf "Digite um número: \n" |> ignore
 
@@ -39,6 +41,7 @@ let parsedResult = PokeApiModule.GetPokemon(num)
                             |> JObject.Parse
 
 for pair in parsedResult do
-    Console.WriteLine ("{0} : {1}", pair.Key, pair.Value)
+    if pair.Key = "id" || pair.Key = "name" then
+        Console.WriteLine ("{0} : {1}", pair.Key, pair.Value)
 
 0
