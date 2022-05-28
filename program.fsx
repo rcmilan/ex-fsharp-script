@@ -1,4 +1,4 @@
-#r "nuget: Newtonsoft.Json"
+#r "nuget: FSharp.Json"
 
 module PokeApiModule = 
     
@@ -16,30 +16,32 @@ module PokeApiModule =
     
     let private _baseUrl = "https://pokeapi.co/api/v2/"
     
-    let GetPokemon num =
+    let GetPokemon dexNumber =
         async {                
             use client = new HttpClient()
 
-            let endpoint = _baseUrl + "pokemon/" + num
+            let endpoint = _baseUrl + "pokemon/" + dexNumber
 
             let! pkmn = HttpClientModule.GetAsync client endpoint
 
             return pkmn
         }
 
+type Pokemon = {
+    id : int
+    name : string
+}
+
 open System
-open Newtonsoft.Json.Linq
+open FSharp.Json
 
-printf "Digite um número: \n" |> ignore
-
+printf "Digite um número: " |> ignore
 let num = Console.ReadLine()
 
-let parsedResult = PokeApiModule.GetPokemon(num)
+let res = PokeApiModule.GetPokemon num
                             |> Async.RunSynchronously
-                            |> JObject.Parse
+                            |> Json.deserialize<Pokemon>
 
-for pair in parsedResult do
-    if pair.Key = "id" || pair.Key = "name" then
-        Console.WriteLine ("{0} : {1}", pair.Key, pair.Value)
+printf "%A : %A" res.id res.name
 
 0
